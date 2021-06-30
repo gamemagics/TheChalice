@@ -12,24 +12,56 @@ namespace Akana {
         /// Directory that stores all I18N text files
         /// </summary>
         private static readonly string _textDirectory = "I18N/";
+
+        /// <summary>
+        /// Character used to split the key and value.
+        /// </summary>
         private static readonly string _keyValueSplitter = ":";
+
+        /// <summary>
+        /// Quotes used to encapture the value string.
+        /// </summary>
         private static readonly char _quotes = '"';
+
+        /// <summary>
+        /// The escape character.
+        /// </summary>
         private static readonly char _escape = '\\';
 
+        /// <summary>
+        /// A dictionary storing the results of parsing.
+        /// </summary>
         private Dictionary<string, string> _dictionary = null;
+
+        /// <summary>
+        /// Initializer.
+        /// </summary>
         public TextFileParser() {
         }
         
+        /// <summary>
+        /// Initializer.
+        /// </summary>
+        /// <param name="assetName">The name of resource which should be pareds.</param>
         public TextFileParser(string assetName) {
             Open(assetName);
         }
 
+        /// <summary>
+        /// Open a asset file. 
+        /// If there is another file opened, the parser will close it.
+        /// </summary>
+        /// <param name="assetName">The name of parser.</param>
         public void Open(string assetName) {
             _dictionary = new Dictionary<string, string>();
             string content = Resources.Load<TextAsset>(_textDirectory + assetName).text;
             this.parseText(ref content);
         }
 
+        /// <summary>
+        /// Parse the text resources and store them in the dictionary.
+        /// </summary>
+        /// <param name="text">The original text. Use reference to reduce the cost of copy.</param>
         private void parseText(ref string text) {
             int splitterPosition = text.IndexOf(_keyValueSplitter);
             while (splitterPosition > -1) {
@@ -72,6 +104,13 @@ namespace Akana {
             }
         }
 
+        /// <summary>
+        /// Get string by given key.
+        /// If the parser has never parsed a file before, or the key doesn't exist, it would return a default string.
+        /// </summary>
+        /// <param name="key">The given key.</param>
+        /// <param name="defaultString">The default value</param>
+        /// <returns>string, the result.</returns>
         public string GetString(string key, string defaultString = "") {
             if (_dictionary == null) {
                 return defaultString;
@@ -87,6 +126,11 @@ namespace Akana {
         }
 
 #if UNITY_EDITOR
+        /// <summary>
+        /// Save a string with spesified key.
+        /// </summary>
+        /// <param name="key">The key of string.</param>
+        /// <param name="val">The string to be stored.</param>
         public void SetString(string key, string val) {
             if (_dictionary == null) {
                 _dictionary = new Dictionary<string, string>();
@@ -98,7 +142,7 @@ namespace Akana {
         public void save(string assetName) {
             // TODO:
         }
-#endif
+#endif // #if UNITY_EDITOR
     }
 
 } // namespace Akana
