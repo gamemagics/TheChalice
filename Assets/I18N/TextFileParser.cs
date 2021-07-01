@@ -47,8 +47,8 @@ namespace Akana {
         /// Initializer.
         /// </summary>
         /// <param name="assetName">The name of resource which should be pareds.</param>
-        public TextFileParser(string assetName) {
-            Open(assetName);
+        public TextFileParser(string assetName, bool absolute = false) {
+            Open(assetName, absolute);
         }
 
         /// <summary>
@@ -56,15 +56,18 @@ namespace Akana {
         /// If there is another file opened, the parser will close it.
         /// </summary>
         /// <param name="assetName">The name of parser.</param>
-        public void Open(string assetName) {
-#if UNITY_EDITOR
-            _filename = assetName;
-            StreamReader reader = new StreamReader(assetName);
-            string content = reader.ReadToEnd();
-            reader.Close();
-#else
-            string content = Resources.Load<TextAsset>(_textDirectory + assetName).text;
-#endif
+        public void Open(string assetName, bool absolute = false) {
+            string content;
+            if (absolute) {
+                _filename = assetName;
+                StreamReader reader = new StreamReader(assetName);
+                content = reader.ReadToEnd();
+                reader.Close();
+            }
+            else {
+                content = Resources.Load<TextAsset>(_textDirectory + assetName).text;
+            }
+            
             _dictionary = new Dictionary<string, string>();
             this.parseText(ref content);
         }
@@ -164,6 +167,8 @@ namespace Akana {
             foreach (var pair in _dictionary) {
                 writer.WriteLine(pair.Key + _keyValueSplitter + _quotes + pair.Value + _quotes);
             }
+
+            writer.Close();
         }
 
         public void Rename(string newName) {

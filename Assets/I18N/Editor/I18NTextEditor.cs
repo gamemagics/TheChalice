@@ -26,7 +26,7 @@ namespace Akana {
         private List<string> _dummy = new List<string>();
         public static void openEditor(string path) {
             _path = path;
-            parser = new TextFileParser(path);
+            parser = new TextFileParser(path, true);
             int index = _path.LastIndexOf("/");
             _filename = _path.Substring(index + 1);
 
@@ -35,6 +35,9 @@ namespace Akana {
 
         private void OnEnable() {
             _pairList = parser.ToList();
+            for (int i = 0; i < _pairList.Count; i++) {
+                _dummy.Add("");
+            }
 
             _serializedObject = new SerializedObject(this);
             _serializedProperty = _serializedObject.FindProperty("_dummy");
@@ -43,12 +46,12 @@ namespace Akana {
             _showList.drawHeaderCallback = (Rect rect) => {
                 GUI.Label(rect, "Text List");
             };
+            _showList.elementHeight = 64 + 24;
 
             _showList.drawElementCallback = (Rect rect, int index, bool selected, bool focus) => {
                 KeyValuePair<string, string> pair = _pairList.ToArray()[index];
-
                 Rect textRect = new Rect(rect) {
-                    height = 32
+                    height = 24
                 };
                 string newKey = EditorGUI.TextField(textRect, pair.Key);
                 if (newKey != pair.Key) {
@@ -58,8 +61,8 @@ namespace Akana {
                 }
                 
                 Rect areaRect = new Rect(rect) {
-                    y = rect.y - 32,
-                    height = 128
+                    y = rect.y + 24,
+                    height = 64
                 };
 
                 string newValue = EditorGUI.TextArea(areaRect, pair.Value);
@@ -81,6 +84,7 @@ namespace Akana {
 
                 _pairList.Add(new KeyValuePair<string, string>(key, "new value"));
                 parser.SetString(key, "new value");
+                _dummy.Add("");
             };
 
             _showList.onRemoveCallback = (ReorderableList list) => {
@@ -88,6 +92,7 @@ namespace Akana {
                 KeyValuePair<string, string> pair = _pairList.ToArray()[index];
                 parser.Remove(pair.Key);
                 _pairList.RemoveAt(index);
+                _dummy.RemoveAt(index);
             };
         }
 
@@ -108,6 +113,9 @@ namespace Akana {
             _serializedObject.ApplyModifiedProperties();
 
             if (GUILayout.Button("Save")) {
+                foreach (var pair in _pairList) {
+                    Debug.Log(pair);
+                }
                 parser.Save();
             }
         }
