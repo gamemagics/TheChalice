@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 namespace Akana {
 
@@ -32,6 +33,9 @@ namespace Akana {
         /// A dictionary storing the results of parsing.
         /// </summary>
         private Dictionary<string, string> _dictionary = null;
+#if UNITY_EDITOR
+        private string _filename;
+#endif
 
         /// <summary>
         /// Initializer.
@@ -53,8 +57,15 @@ namespace Akana {
         /// </summary>
         /// <param name="assetName">The name of parser.</param>
         public void Open(string assetName) {
-            _dictionary = new Dictionary<string, string>();
+#if UNITY_EDITOR
+            _filename = assetName;
+            StreamReader reader = new StreamReader(assetName);
+            string content = reader.ReadToEnd();
+            reader.Close();
+#else
             string content = Resources.Load<TextAsset>(_textDirectory + assetName).text;
+#endif
+            _dictionary = new Dictionary<string, string>();
             this.parseText(ref content);
         }
 
@@ -138,9 +149,46 @@ namespace Akana {
     
             _dictionary[key] = val;
         }
+
+        public void Replace(string oldKey, string newKey) {
+            if (_dictionary == null || !_dictionary.ContainsKey(oldKey)) {
+                return;
+            }
+
+            _dictionary[newKey] = _dictionary[oldKey];
+            _dictionary.Remove(oldKey);
+        }
     
-        public void save(string assetName) {
-            // TODO:
+        public void Save() {
+            StreamWriter writer = new StreamWriter(_filename);
+            foreach (var pair in _dictionary) {
+                writer.WriteLine(pair.Key + _keyValueSplitter + _quotes + pair.Value + _quotes);
+            }
+        }
+
+        public void Rename(string newName) {
+            File.Move(_filename, newName);
+        }
+
+        public List<KeyValuePair<string, string>> ToList() {
+            var list = new List<KeyValuePair<string, string>>();
+            foreach (var pair in _dictionary) {
+                list.Add(pair);
+            }
+
+            return list;
+        }
+
+        public bool ContainsKey(string key) {
+            return _dictionary != null && _dictionary.ContainsKey(key);
+        }
+
+        public void Remove(string key) {
+            if (_dictionary == null || !_dictionary.ContainsKey(key)) {
+                return;
+            }
+
+            _dictionary.Remove(key);
         }
 #endif // #if UNITY_EDITOR
     }

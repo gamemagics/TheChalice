@@ -17,9 +17,20 @@ namespace Akana {
         private SerializedObject _serializedObject;
         private SerializedProperty _serializedProperty;
 
+        private int _newFileIndex = 0;
+
         [MenuItem("Akana/The Chalice/I18N Resources Dashboard")]
         public static void ShowWindow() {
             EditorWindow.GetWindow(typeof(I18NResourcesDashboard));
+        }
+
+        private string getSavedPath() {
+            string path = Application.dataPath + @"/Resources/I18N/" + _languageCode.ToString();
+            if (!Directory.Exists(path)) {
+                Directory.CreateDirectory(path);
+            }
+
+            return path;
         }
 
         private void OnEnable() {
@@ -45,12 +56,41 @@ namespace Akana {
                     width = 36,
                     x = rect.x + rect.width - 36
                 };
-                GUI.Button(buttonRect, "Edit");
+
+                if (GUI.Button(buttonRect, "Edit")) {
+                    string path = getSavedPath() + "/" + _fileList.ToArray()[index];
+                    I18NTextEditor.openEditor(path);
+                }
+            };
+
+            _resourcesList.onAddCallback = (ReorderableList list) => {
+                string filename = "NewI18NTextFile" + _newFileIndex.ToString() + ".yaml";
+                string path = getSavedPath() + "/" + filename;
+                while (File.Exists(path)) {
+                    _newFileIndex++;
+                    filename = "NewI18NTextFile" + _newFileIndex.ToString() + ".yaml";
+                    path = getSavedPath() + "/" + filename;
+                }
+
+                _fileList.Add(filename);
+                _newFileIndex++;
+                FileStream stream = new FileStream(path, FileMode.CreateNew);
+                stream.Close();
+            };
+
+            _resourcesList.onRemoveCallback = (ReorderableList list) => {
+                int index = list.index;
+                string path = getSavedPath() + "/" + _fileList.ToArray()[index];
+                _fileList.RemoveAt(list.index);
+
+                if (File.Exists(path)) {
+                    File.Delete(path);
+                }
             };
         }
 
         private void GetI18NFileList() {
-            string path = Application.dataPath + @"/Resources/I18N/" + _languageCode.ToString();
+            string path = getSavedPath();
             DirectoryInfo dir = new DirectoryInfo(path);
             _fileList.Clear();
 
