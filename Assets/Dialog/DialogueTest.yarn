@@ -1,0 +1,24 @@
+title: Start
+tags: 
+colorID: 0
+position: 617,133
+---
+Howdy! What are you up to?
+
+[[Nah. Nothing special.|nothing]]
+[[Actually I'm going to see a friend.|friend]]
+===
+title: nothing
+tags: 
+colorID: 0
+position: 395,428
+---
+Oh! In that case, why don't you try something new with me?
+===
+title: friend
+tags: 
+colorID: 0
+position: 874,433
+---
+I see. Have a good day!
+===
