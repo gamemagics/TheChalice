@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace Akana {
+﻿namespace Akana {
 
     /// <summary>
     /// Language code enum. Add more language code here if you need...

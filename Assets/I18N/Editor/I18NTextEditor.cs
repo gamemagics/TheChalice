@@ -1,29 +1,66 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
+using UnityEngine;
 
 namespace Akana {
 
+    /// <summary>
+    /// Editor used to modify detailed text.
+    /// </summary>
     public class I18NTextEditor : EditorWindow {
 
+        /// <summary>
+        /// Full path of I18N file
+        /// </summary>
         private static string _path;
+
+        /// <summary>
+        /// Filename of current I18N file
+        /// </summary>
         private static string _filename;
+
+        /// <summary>
+        /// I18N file parser
+        /// </summary>
         private static TextFileParser parser;
 
+        /// <summary>
+        /// Reorderable list object
+        /// </summary>
         private ReorderableList _showList;
 
+        /// <summary>
+        /// Serialized object
+        /// </summary>
         private SerializedObject _serializedObject;
+
+        /// <summary>
+        /// Serialized property
+        /// </summary>
         private SerializedProperty _serializedProperty;
 
+        /// <summary>
+        /// Index of new files' suffix
+        /// </summary>
         private int _newKeyIndex = 0;
 
+        /// <summary>
+        /// I18N key-value resources list
+        /// </summary>
         [SerializeField]
         private List<KeyValuePair<string, string>> _pairList;
 
+        /// <summary>
+        /// List with empty string in order to show the detailed data
+        /// </summary>
         [SerializeField]
         private List<string> _dummy = new List<string>();
+
+        /// <summary>
+        /// Create editor window with absolute path.
+        /// </summary>
+        /// <param name="path">Absolute path of I18N file</param>
         public static void openEditor(string path) {
             _path = path;
             parser = new TextFileParser(path, true);
@@ -33,6 +70,9 @@ namespace Akana {
             EditorWindow.GetWindow(typeof(I18NTextEditor));
         }
 
+        /// <summary>
+        /// Function called by Unity when starting to render the window
+        /// </summary>
         private void OnEnable() {
             _pairList = parser.ToList();
             for (int i = 0; i < _pairList.Count; i++) {
@@ -96,6 +136,9 @@ namespace Akana {
             };
         }
 
+        /// <summary>
+        /// Function called by Unity when starting to render the window
+        /// </summary>
         private void OnGUI() {
             this.titleContent = new GUIContent(_filename);
             GUILayout.Label("Filename:");

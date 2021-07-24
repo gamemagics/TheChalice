@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Akana;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Akana;
 
 public class Test : MonoBehaviour {
     public Text showText = null;

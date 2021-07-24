@@ -1,29 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.IO;
 using UnityEditor;
 using UnityEditorInternal;
-using System.IO;
+using UnityEngine;
 
 namespace Akana {
+    /// <summary>
+    /// Dashboard showing I18N resources in editor mode.
+    /// </summary>
     public class I18NResourcesDashboard : EditorWindow {
 
+        /// <summary>
+        /// Current selected language
+        /// </summary>
         private I18NLanguageCode _languageCode = I18NLanguageCode.EN_GB;
+
+        /// <summary>
+        /// List of filenames
+        /// </summary>
         [SerializeField]
         private List<string> _fileList = new List<string>();
 
+        /// <summary>
+        /// Reorderable list object
+        /// </summary>
         private ReorderableList _resourcesList;
 
+        /// <summary>
+        /// Serialized object
+        /// </summary>
         private SerializedObject _serializedObject;
+
+        /// <summary>
+        /// Serialized property
+        /// </summary>
         private SerializedProperty _serializedProperty;
 
+        /// <summary>
+        /// Index of new files' suffix
+        /// </summary>
         private int _newFileIndex = 0;
 
+        /// <summary>
+        /// Show Dashboard window.
+        /// </summary>
         [MenuItem("Akana/The Chalice/I18N Resources Dashboard")]
         public static void ShowWindow() {
             EditorWindow.GetWindow(typeof(I18NResourcesDashboard));
         }
 
+        /// <summary>
+        /// Get the absolute path of current language directory.
+        /// </summary>
+        /// <returns>the absolute path of current language directory</returns>
         private string getSavedPath() {
             string path = Application.dataPath + @"/Resources/I18N/" + _languageCode.ToString();
             if (!Directory.Exists(path)) {
@@ -33,6 +63,9 @@ namespace Akana {
             return path;
         }
 
+        /// <summary>
+        /// Function called by Unity when starting to render the window
+        /// </summary>
         private void OnEnable() {
             GetI18NFileList();
 
@@ -89,6 +122,9 @@ namespace Akana {
             };
         }
 
+        /// <summary>
+        /// Add all yaml file in current language's directory into file list
+        /// </summary>
         private void GetI18NFileList() {
             string path = getSavedPath();
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -99,6 +135,9 @@ namespace Akana {
             }
         }
 
+        /// <summary>
+        /// Function called by Unity when starting to render the window
+        /// </summary>
         private void OnGUI() {
             this.titleContent = new GUIContent("I18N Resources Dashboard");
 

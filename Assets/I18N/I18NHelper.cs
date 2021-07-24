@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Akana {
+﻿namespace Akana {
 
     /// <summary>
     /// Singleton I18N Helper Class. Use this class instead access I18N text resources directly.
