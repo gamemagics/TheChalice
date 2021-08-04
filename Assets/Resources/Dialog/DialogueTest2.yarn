@@ -1,6 +1,26 @@
-﻿title: Start
+title: Start
 tags:
 colorID: 0
 ---
-Hello! Welcome to the Chalice Test Scene!
+<<PlayEffect 0 0.5>>
+Hello! Welcome to the <i>Chalice Test Scene</i>!  @line:048d5b0
+Are you <color=#66CCFF>NEW</color> here?  @line:00c904b
+[[Yep!|intro]]  @line:0ddf735
+[[No.|end]]  @line:0b8d552
+===
+title: intro
+tags:
+colorID: 0
+---
+<<PlayOnce 1 0.5>>
+<link="tremble"><color=#FF0000>WOW!</color></link>  @line:050037c
+<<PlayEffect 0 0.5>>
+A NEW USER!  @line:0a141d7
+[[end]]
+===
+title: end
+tags:
+colorID: 0
+---
+<b>Bye!</b>  @line:085ddda
 ===

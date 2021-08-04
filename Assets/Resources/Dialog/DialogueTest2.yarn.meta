@@ -8,10 +8,18 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 94073015eacc34c1d8fc6786e43d60ca, type: 3}
-  baseLanguageID: zh-CN
-  stringIDs: []
+  baseLanguageID: en
+  stringIDs:
+  - line:048d5b0
+  - line:00c904b
+  - line:0ddf735
+  - line:0b8d552
+  - line:050037c
+  - line:0a141d7
+  - line:085ddda
   compilationStatus: 0
   isSuccesfullyCompiled: 1
   compilationErrorMessage: 
-  baseLanguage: {instanceID: 0}
+  baseLanguage: {fileID: 7128917941130120860, guid: 0d981c9aad741c34f87d60e203f49d13,
+    type: 3}
   localizations: []

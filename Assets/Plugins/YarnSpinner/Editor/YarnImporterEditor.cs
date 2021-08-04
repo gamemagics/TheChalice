@@ -121,7 +121,7 @@ public class YarnImporterEditor : ScriptedImporterEditor {
         }
 
         if (yarnImporter.AnyImplicitStringIDs) {
-            EditorGUILayout.HelpBox("Add #line: tags to all lines and options to enable creating new localisations. Either add them manually, or click Add Line Tags to automatically add tags. Note that this will modify your files on disk, and cannot be undone.", MessageType.Info);
+            EditorGUILayout.HelpBox("Add @line: tags to all lines and options to enable creating new localisations. Either add them manually, or click Add Line Tags to automatically add tags. Note that this will modify your files on disk, and cannot be undone.", MessageType.Info);
             if (GUILayout.Button("Add Line Tags")) {
                 AddLineTagsToFile(yarnImporter.assetPath);
             }
@@ -170,7 +170,9 @@ public class YarnImporterEditor : ScriptedImporterEditor {
         var contents = File.ReadAllText(assetPath);
         var taggedVersion = Yarn.Compiler.Utility.AddTagsToLines(contents, allLineTags);
 
-        File.WriteAllText(assetPath, taggedVersion);
+        Debug.Log(taggedVersion);
+
+        File.WriteAllText(assetPath, taggedVersion.Replace("#line", "@line"));
 
         AssetDatabase.ImportAsset(assetPath);
     }

@@ -289,8 +289,23 @@ namespace Yarn.Unity {
                 // Display the line one character at a time
                 var stringBuilder = new StringBuilder ();
 
-                foreach (char c in text) {
-                    stringBuilder.Append (c);
+                for (int i = 0; i < text.Length; ++i) {
+                    char c = text[i];
+                    if (c == '<') {
+                        int pos = text.IndexOf('>', i + 1);
+                        if (pos > -1) {
+                            string label = text.Substring(i, pos - i + 1);
+                            stringBuilder.Append(label);
+                            i = pos;
+                        }
+                        else {
+                            stringBuilder.Append (c);    
+                        }
+                    }
+                    else {
+                        stringBuilder.Append (c);
+                    }
+                    
                     onLineUpdate?.Invoke(stringBuilder.ToString ());
                     if (userRequestedNextLine) {
                         // We've requested a skip of the entire line.
@@ -298,6 +313,7 @@ namespace Yarn.Unity {
                         onLineUpdate?.Invoke(text);
                         break;
                     }
+
                     yield return new WaitForSeconds (textSpeed);
                 }
             } else {
