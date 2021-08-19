@@ -19,6 +19,8 @@ public class StaticUI : MonoBehaviour {
     }
 
     public void SetText(string text) {
-        tmpText.text = text;
+        if (tmpText != null) {
+            tmpText.text = text;
+        }
     }
 }

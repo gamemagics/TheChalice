@@ -3,7 +3,6 @@ using Yarn;
 using Yarn.Unity;
 using System.Collections.Generic;
 using Google.Protobuf.Collections;
-using System.Collections;
 using System;
 
 [AddComponentMenu("Scripts/Yarn Spinner/Static UI Runner")]
