@@ -74,7 +74,12 @@ public class StaticUIRunner : MonoBehaviour {
                 csv.Read(); csv.ReadHeader();
 
                 while (csv.Read()) {
-                    texts.Add(csv.GetField("id"), csv.GetField("text"));
+                    var str = csv.GetField("text");
+                    
+                    str = str.Replace("\\r\\n", "\n");
+                    str = str.Replace("\\n", "\n");
+                    
+                    texts.Add(csv.GetField("id"), str);
                 }
             }
         }
